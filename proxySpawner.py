@@ -100,7 +100,7 @@ class updateAssets(bpy.types.Operator):
 
 
 # class for the UI list..... idk what I'm doing
-class TestPropertyGroup(bpy.types.PropertyGroup):
+class groupListing(bpy.types.UIList):
     bool    = bpy.props.BoolProperty(default=False)
     integer = bpy.props.IntProperty()
     string  = bpy.props.StringProperty()
@@ -134,10 +134,12 @@ class proxyPanel(bpy.types.Panel):
 		split = layout.split()
 		#group = ob.vertex_groups.active #getAssetsList()
 		groups = bpy.data.groups
+		
+		### stopped development here, couldn't figure out UI lists
 
 		row = layout.row()
-		row.template_list("UI_UL_list", "", bpy.scene,
-							"material_slots", bpy.scene, "active_material_index")
+		row.template_list("UI_UL_list", "", bpy.data,
+							"groups", bpy.data, "active_index", rows=2)
 		"""
 		col = row.column(align=True)
 		col.operator("object.vertex_group_add", icon='ZOOMIN', text="")
@@ -182,7 +184,7 @@ def register():
 	bpy.utils.register_class(proxySpawn)
 	bpy.utils.register_class(proxyPanel)
 	bpy.utils.register_class(updateAssets)
-	bpy.utils.register_class(TestPropertyGroup)
+	#bpy.utils.register_class(groupListing)
 	
 	#properties
 	bpy.types.Scene.proxyspawn_assets_path = bpy.props.StringProperty(
@@ -193,21 +195,21 @@ def register():
 		name="Link library groups",
 		description="Links groups imported, otherwise groups are appended",
 		default=True)
-	bpy.types.Scene.my_settings = bpy.props.CollectionProperty(type=TestPropertyGroup)
+	#bpy.types.Scene.my_settings = bpy.props.CollectionProperty(type=groupListing)
 	# Unused, but this is needed for the TemplateList to work…
-	bpy.types.Scene.my_settings_idx = bpy.props.IntProperty()
+	#bpy.types.Scene.my_settings_idx = bpy.props.IntProperty()
 
 def unregister():
 	bpy.utils.unregister_class(proxySpawn)
 	bpy.utils.unregister_class(proxyPanel)
 	bpy.utils.unregister_class(updateAssets)
-	bpy.utils.unregister_class(TestPropertyGroup)
+	#bpy.utils.unregister_class(groupListing)
 	
 	#properties
 	del bpy.types.Scene.proxyspawn_assets_path
 	del bpy.types.Scene.proxylinkGroup
-	del bpy.types.Scene.my_settings
-	del bpy.types.Scene.my_settings_idx
+	#del bpy.types.Scene.my_settings
+	#del bpy.types.Scene.my_settings_idx
 
 if __name__ == "__main__":
 	register()
